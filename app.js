@@ -4,8 +4,9 @@ import MusicController
     from "./controllers/posts/post-controller.js";
 import cors from 'cors'
 import mongoose from "mongoose";
+import {USERNAME, PASSWORD} from './creds.js'
 
-mongoose.connect("mongodb+srv://aqua7cs:Rn5j37VMqKfSil2o@webdevprojectsp23.e30xhje.mongodb.net/FinalProject")
+mongoose.connect(`mongodb+srv://${USERNAME}:${PASSWORD}@webdevprojectsp23.e30xhje.mongodb.net/FinalProject`)
 const app = express()
 app.use(cors())
 app.use(express.json());
