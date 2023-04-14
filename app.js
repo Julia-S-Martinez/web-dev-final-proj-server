@@ -1,11 +1,27 @@
 import express from 'express';
 import UserController from "./controllers/users/users-controller.js";
-import MusicController
+import PostController
     from "./controllers/posts/post-controller.js";
+import AuthController from "./users/auth-controller.js";
 import cors from 'cors'
-const app = express()
-app.use(cors())
+import session from "express-session";
+const app = express();
+app.use(
+    session({
+        secret: "any string",
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+app.use(
+    cors({
+        credentials: true,
+        origin: "http://localhost:3000",
+    })
+);
 app.use(express.json());
-MusicController(app);
+const port = process.env.PORT || 4000;
+PostController(app);
 UserController(app);
-app.listen(process.env.PORT || 4000);
+AuthController(app);
+app.listen(port);

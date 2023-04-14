@@ -1,55 +1,56 @@
-import people from './users.js'
-let users = people
+import * as usersDao from './users-dao'
 
 const UserController = (app) => {
-    app.get('/api/users', findUsers)
+    app.get('/api/users/followers/:uid', findFollowers)
+    app.get('/api/users/following/:uid', findFollowing)
     app.get('/api/users/:uid', findUserById);
-    app.post('/api/users', createUser);
+    app.post('/api/users/:username/:password/:role', createUser);
     app.delete('/api/users/:uid', deleteUser);
     app.put('/api/users/:uid', updateUser);
 }
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     const userId = req.params['uid'];
-    const updates = req.body;
-    users = users.map((usr) =>
-        usr._id === userId ?
-            {...usr, ...updates} :
-            usr
-    );
-    res.sendStatus(200);
+    const updatedUser = req.body;
+    const status = await usersDao
+        .updateUser(userId, updatedUser);
+    res.json(status);
 }
 
-
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     const newUser = req.body;
-    newUser._id = (new Date()).getTime() + '';
-    users.push(newUser);
-    res.json(newUser);
+    newUser.username = req.params.username;
+    newUser.password = req.params.password;
+    newUser.role = req.params.role;
+    const status = await usersDao
+        .createUser(newUser);
+    res.json(status);
 }
-const deleteUser = (req, res) => {
-    const userId = req.params['uid'];
-    users = users.filter(usr =>
-        usr._id !== userId);
-    res.sendStatus(200);
+const deleteUser = async (req, res) => {
+    const userIdToDelete = req.params['uid'];
+    const status = await usersDao
+        .deleteUser(userIdToDelete);
+    res.json(status);
 }
 
-const findUserById = (req, res) => {
+const findUserById = async (req, res) => {
     const userId = req.params.uid;
-    const user = users
-        .find(u => u._id === userId);
-    res.json(user);
+    const status = await usersDao
+        .findUser(userId);
+    res.json(status);
 }
 
-const findUsers = (req, res) => {
-    const type = req.query.type
-    if(type) {
-        const usersOfType = users
-            .filter(u => u.type === type)
-        res.json(usersOfType)
-        return
-    }
+const findFollowing = async (req, res) => {
+    const userId = req.query.uid
+    const followingList = await usersDao
+        .findUserFollowing(userId);
+    res.json(followingList);
+}
 
-    res.json(users)
+const findFollowers = async (req, res) => {
+    const userId = req.query.uid
+    const followerList = await usersDao
+        .findUserFollowers(userId);
+    res.json(followerList);
 }
 
 export default UserController
