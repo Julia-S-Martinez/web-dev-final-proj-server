@@ -4,6 +4,7 @@ import PostController
     from "./controllers/posts/post-controller.js";
 import AuthController from "./users/auth-controller.js";
 import cors from 'cors'
+
 import session from "express-session";
 const app = express();
 app.use(
@@ -19,6 +20,7 @@ app.use(
         origin: "http://localhost:3000",
     })
 );
+mongoose.connect(`mongodb+srv://${USERNAME}:${PASSWORD}@webdevprojectsp23.e30xhje.mongodb.net/FinalProject`)
 app.use(express.json());
 const port = process.env.PORT || 4000;
 PostController(app);

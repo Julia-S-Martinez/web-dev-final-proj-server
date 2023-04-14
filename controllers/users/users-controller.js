@@ -53,4 +53,9 @@ const findFollowers = async (req, res) => {
     res.json(followerList);
 }
 
-export default UserController
+export default (app) => {
+    app.post('/api/user', createUser);
+    app.get('/api/user', findUsers);
+    app.put('/api/user/:uid', updateUser);
+    app.delete('/api/user/:uid', deleteUser);
+}

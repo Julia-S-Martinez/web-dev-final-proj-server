@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-const schema = mongoose.Schema({
-    userId: String,
-    date: String,
+const postsSchema = mongoose.Schema({
     trackId: String,
-    likes: Number,
-    comments:[{body: String, userId: String}]
-}, {collection: 'posts'});
-export default schema;
+    userId: String,
+    likedUsers : [String],
+    comments: [{userId: String, body: String}],
+}, {collection: 'Posts'});
+export default postsSchema;
+

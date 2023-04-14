@@ -4,4 +4,4 @@ export const findPost = (pid) => postsModel.find({_id: pid});
 export const findFollowingPosts = (uids) => postsModel.find({userId: {$in: uids}});
 export const createPost = (post) => postsModel.create(post);
 export const deletePost = (pid) => postsModel.deleteOne({_id: pid});
-export const updatePost = (pid, post) => postsModel.updateOne({_id: pid}, {$set: post})
+export const updatePost = (pid, post) => postsModel.updateOne({_id: pid}, {$set: post});
