@@ -6,6 +6,7 @@ const usersSchema = mongoose.Schema({
     password: String,
     following : [String],
     followers : [String],
+    createdAt: { type: Date, default: Date.now },
     role : {type: "String", enum: ['LISTENER', 'ARTIST']},
     likedOrPostedSongs : [String],
 }, {collection: 'Users'});

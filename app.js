@@ -1,15 +1,29 @@
 import express from 'express';
 import UserController from "./controllers/users/users-controller.js";
-import MusicController
+import PostController
     from "./controllers/posts/post-controller.js";
+import AuthController from "./users/auth-controller.js";
 import cors from 'cors'
-import mongoose from "mongoose";
-import {USERNAME, PASSWORD} from './creds.js'
 
+import session from "express-session";
+const app = express();
+app.use(
+    session({
+        secret: "any string",
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+app.use(
+    cors({
+        credentials: true,
+        origin: "http://localhost:3000",
+    })
+);
 mongoose.connect(`mongodb+srv://${USERNAME}:${PASSWORD}@webdevprojectsp23.e30xhje.mongodb.net/FinalProject`)
-const app = express()
-app.use(cors())
 app.use(express.json());
-MusicController(app);
+const port = process.env.PORT || 4000;
+PostController(app);
 UserController(app);
-app.listen(process.env.PORT || 4000);
+AuthController(app);
+app.listen(port);
