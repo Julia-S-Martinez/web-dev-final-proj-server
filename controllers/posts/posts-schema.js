@@ -1,7 +1,4 @@
-import mongoose from "mongoose";
-
-// TODO: decide later to swap types fo mongoose.Types.ObjectId or if
-// we can convert to generic String for simplicity
+import mongoose from 'mongoose';
 const postsSchema = mongoose.Schema({
     trackId: String,
     userId: String,
@@ -9,3 +6,4 @@ const postsSchema = mongoose.Schema({
     comments: [{userId: String, body: String}],
 }, {collection: 'Posts'});
 export default postsSchema;
+
