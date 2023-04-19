@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const usersSchema = mongoose.Schema({
     profilePicture: String,
-    username: {type: String, required: true},
+    username: String,
     password: {type: String, required: true},
     following : {type: [String], required: true, default: []},
     followers : {type: [String], required: true, default: []},

@@ -1,6 +1,6 @@
 import postsModel from './posts-model.js';
 export const findPosts = () => postsModel.find();
-export const findPost = (pid) => postsModel.find({_id: pid});
+export const findPost = (pid) => postsModel.findById(pid);
 export const findFollowingPosts = (uids) => postsModel.find({artistId: {$in: uids}});
 export const createPost = (post) => postsModel.create(post);
 export const deletePost = (pid) => postsModel.deleteOne({_id: pid});

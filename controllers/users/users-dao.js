@@ -1,7 +1,9 @@
 import usersModel from './users-model.js';
 export const findUserByCredentials = (username, password) =>
     usersModel.findOne({ username, password });
-export const findUser = (pid) => usersModel.find({_id: pid});
+export const findUser = (uid) => usersModel.findById(uid);
+
+export const findUsers = () => usersModel.find();
 export const findUserFollowing = (pid) => usersModel.find({_id: pid}, 'following');
 export const findUserFollowers = (pid) => usersModel.find({_id: pid}, 'followers');
 export const createUser = (user) => usersModel.create(user);

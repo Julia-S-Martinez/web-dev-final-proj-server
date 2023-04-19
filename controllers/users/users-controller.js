@@ -1,10 +1,9 @@
-import * as usersDao from './users-dao'
+import * as usersDao from './users-dao.js'
 
 const UserController = (app) => {
     app.get('/api/users/followers/:uid', findFollowers)
     app.get('/api/users/following/:uid', findFollowing)
     app.get('/api/users/:uid', findUserById);
-    app.post('/api/users/:username/:password/:role', createUser);
     app.delete('/api/users/:uid', deleteUser);
     app.put('/api/users/:uid', updateUser);
 }
@@ -18,13 +17,16 @@ const updateUser = async (req, res) => {
 
 const createUser = async (req, res) => {
     const newUser = req.body;
-    newUser.username = req.params.username;
-    newUser.password = req.params.password;
-    newUser.role = req.params.role;
     const status = await usersDao
         .createUser(newUser);
     res.json(status);
 }
+
+const findUsers = async (req, res) => {
+    const users = await usersDao.findUsers()
+    res.json(users);
+}
+
 const deleteUser = async (req, res) => {
     const userIdToDelete = req.params['uid'];
     const status = await usersDao
@@ -56,6 +58,7 @@ const findFollowers = async (req, res) => {
 export default (app) => {
     app.post('/api/user', createUser);
     app.get('/api/user', findUsers);
+    app.get('/api/user/:uid', findUserById);
     app.put('/api/user/:uid', updateUser);
     app.delete('/api/user/:uid', deleteUser);
 }
