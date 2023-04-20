@@ -3,6 +3,11 @@ import {findUser, updateUser} from '../users/users-dao.js'
 import {findUserFollowing} from "../users/users-dao.js";
 
 const createPost = async (req, res) => {
+    {/*
+        {
+            fields of post as defined in posts schema
+        }
+    */}
     const newPost = req.body;
     newPost.dateCreated = (new Date()).getTime()+'';
     newPost.comments = [];
@@ -17,24 +22,51 @@ const findPosts = async (req, res) => {
     const posts = await postsDao.findPosts()
     res.json(posts);
 }
+
 const addComment = async (req, res) => {
+    {/*
+        {
+            "body" : body of comment
+            "userId" : _id field of commenter user
+        }
+    */}
+
     const postIdToUpdate = req.params.pid;
-    const comment = req.params.body;
-    const commentUser = req.params.userId;
-    const updatedPost = req.body;
-    updatedPost.comments.push({body: comment, userId: commentUser});
+    const comment = req.body;
+    const postToUpdate = await postsDao.findPost(postIdToUpdate);
+    postToUpdate.comments.push({body: comment.body, userId: comment.userId});
     const status = await postsDao
-        .updatePost(postIdToUpdate, updatedPost);
+        .updatePost(postIdToUpdate, postToUpdate);
+    res.json(status);
+}
+
+const deleteComment = async(req, res) => {
+    const postIdToUpdate = req.params.pid;
+    const post = await postsDao.findPost((postIdToUpdate));
+    let postComments = post["comments"];
+    const index = postComments.indexOf(req.params.cid);
+    postComments.splice(index, 1);
+    const postUpdates = {"comments" : postComments};
+
+    const status = await postsDao.updatePost(postIdToUpdate, postUpdates)
     res.json(status);
 }
 
 const toggleClaim = async (req, res) => {
+    {/*
+        {
+            "claimed" : true or false, depending on whether or not
+                request is attempting to claim
+            "userId" : _id field of claimer user, should be an ARTIST
+        }
+    */}
+
+
     const postIdToUpdate = req.params.pid;
     const userId = req.params.userId;
     const user = await findUser(userId).lean();
     let updates = req.body;
     const originalPost = await postsDao.findPost(postIdToUpdate);
-
 
     if (user["role"] === "ARTIST" && updates.claimed !== originalPost["claimed"]) {
         if (updates.claimed === true) {
@@ -81,7 +113,7 @@ const findNewPosts = async (req, res) => {
 const findNewFollowingPosts = async (req, res) => {
     const userId = req.params.userId;
     const following = await findUserFollowing(userId);
-    const posts = await postsDao.findFollowingPosts(following).sort({date: "desc"}).limit(10);
+    const posts = await postsDao.findFollowingPosts(following.following).sort({date: "desc"}).limit(10);
     res.json(posts);
 }
 
@@ -90,8 +122,9 @@ export default (app) => {
     app.get('/api/post', findPosts);
     app.get('/api/post/:pid', findPostById);
     app.put('/api/post/:pid/:userId', toggleClaim);
-    app.put('/api/post/:pid/:userId/:body', addComment);
+    app.put('/api/post/:pid', addComment);
     app.delete('/api/post/:pid', deletePost);
+    app.delete('/api/post/:pid/:cid', deleteComment);
     app.get('/api/posts/home', findNewPosts);
     app.get('/api/posts/home/:userId', findNewFollowingPosts);
 }

@@ -14,7 +14,6 @@ const usersSchema = mongoose.Schema({
         default : []
     },
     // unique for Listeners, although not enforced
-    liked_songs : {type : [String], default : []},
-    comments : {type : [String], default : []}
+    liked_songs : {type : [String], default : []}
 }, {collection: 'Users'});
 export default usersSchema;
