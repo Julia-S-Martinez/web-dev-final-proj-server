@@ -92,6 +92,49 @@ const toggleClaim = async (req, res) => {
     res.json(status);
 }
 
+
+const toggleLike = async (req, res) => {
+    {/*
+        {
+            "userId" : string of user trying to toggle Like status
+                for the post
+        }
+    */}
+    const postId = req.params.pid;
+    const post = await postsDao.findPost(postId);
+
+    const userId = req.body.userId;
+    const user = await findUser(userId);
+
+    const userInPostLikes = post.likedUsers.includes(userId);
+    const postInUserLikes = user.liked_songs.includes(postId);
+    // If state isn't reflected in both members, do nothing.
+    if (userInPostLikes === postInUserLikes) {
+        let postUpdates = {};
+        let userUpdates = {};
+
+        if (userInPostLikes) {
+            // unlike
+            let likedUserList = post.likedUsers;
+            const index = likedUserList.indexOf(userId);
+            likedUserList.splice(index, 1);
+            postUpdates["likedUsers"] = likedUserList;
+
+            let likedSongsList = user.liked_songs;
+            const index_2 = likedSongsList.indexOf(postId);
+            likedSongsList.splice(index_2, 1);
+            userUpdates["liked_songs"] = likedSongsList;
+        } else {
+            // like
+            postUpdates["likedUsers"] = [...post.likedUsers, userId];
+            userUpdates["liked_songs"] = [...user.liked_songs, postId];
+        }
+        await updateUser(userId, userUpdates);
+        const status = await postsDao.updatePost(postId, postUpdates);
+        res.json(status);
+    }
+}
+
 const deletePost = async (req, res) => {
     const postIdToDelete = req.params.pid;
     const status = await postsDao
@@ -123,6 +166,7 @@ export default (app) => {
     app.get('/api/post/:pid', findPostById);
     app.put('/api/post/:pid/:userId', toggleClaim);
     app.put('/api/post/:pid', addComment);
+    app.put('/api/like/post/:pid', toggleLike);
     app.delete('/api/post/:pid', deletePost);
     app.delete('/api/post/:pid/:cid', deleteComment);
     app.get('/api/posts/home', findNewPosts);

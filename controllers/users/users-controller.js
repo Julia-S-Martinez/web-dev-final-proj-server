@@ -1,13 +1,6 @@
 import * as usersDao from './users-dao.js'
 import {findUser} from "./users-dao.js";
 
-const UserController = (app) => {
-    app.get('/api/users/followers/:uid', findFollowers)
-    app.get('/api/users/following/:uid', findFollowing)
-    app.get('/api/users/:uid', findUserById);
-    app.delete('/api/users/:uid', deleteUser);
-    app.put('/api/users/:uid', updateUser);
-}
 const updateUser = async (req, res) => {
     {/*
         {
