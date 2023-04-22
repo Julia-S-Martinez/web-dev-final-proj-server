@@ -1,4 +1,4 @@
-import * as usersDao from './users-dao'
+import * as usersDao from './users-dao.js'
 
 const UserController = (app) => {
     app.get('/api/users/followers/:uid', findFollowers)
@@ -55,7 +55,7 @@ const findFollowers = async (req, res) => {
 
 export default (app) => {
     app.post('/api/user', createUser);
-    app.get('/api/user', findUsers);
+    app.get('/api/user', findUserById);
     app.put('/api/user/:uid', updateUser);
     app.delete('/api/user/:uid', deleteUser);
 }

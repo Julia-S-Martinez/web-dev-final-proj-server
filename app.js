@@ -2,7 +2,7 @@ import express from 'express';
 import UserController from "./controllers/users/users-controller.js";
 import PostController
     from "./controllers/posts/post-controller.js";
-import AuthController from "./users/auth-controller.js";
+import AuthController from "./controllers/users/auth-controller.js";
 import cors from 'cors';
 import mongoose from "mongoose";
 
