@@ -148,6 +148,12 @@ const findPostById = async (req, res) => {
     res.json(post);
 }
 
+const findPostByTrackId = async (req, res) => {
+    const trackIdToFind = req.params.tid;
+    const post = await postsDao.findByTrackId(trackIdToFind);
+    res.json(post);
+}
+
 const findNewPosts = async (req, res) => {
     const posts = await postsDao.findPosts().sort({date: "desc"}).limit(10);
     res.json(posts);
@@ -164,6 +170,7 @@ export default (app) => {
     app.post('/api/post/:trackId/:userId', createPost);
     app.get('/api/post', findPosts);
     app.get('/api/post/:pid', findPostById);
+    app.get('/api/track/:tid', findPostByTrackId);
     app.put('/api/post/:pid/:userId', toggleClaim);
     app.put('/api/post/:pid', addComment);
     app.put('/api/like/post/:pid', toggleLike);
