@@ -1,4 +1,4 @@
-import * as postsDao from './posts-dao'
+import * as postsDao from './posts-dao.js'
 import {findUserFollowing} from "../users/users-dao.js";
 
 const createPost = async (req, res) => {
