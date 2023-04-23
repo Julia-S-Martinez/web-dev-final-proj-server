@@ -42,7 +42,13 @@ const AuthController = (app) => {
         res.sendStatus(200);
     };
 
-    const update   = async (req, res) => { };
+    const update = async (req, res) => {
+        const userId = req.body._id;
+        const updatedUser = req.body;
+        const status = await usersDao
+            .updateUser(userId, updatedUser);
+        res.json(status);
+    };
 
 
     app.post("/api/users/register", register);

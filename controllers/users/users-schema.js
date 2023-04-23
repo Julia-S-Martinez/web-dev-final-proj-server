@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const usersSchema = mongoose.Schema({
     profilePicture: String,
-    username: {type: String, required: true},
+    username: String,
     password: {type: String, required: true},
     following : {type: [String], required: true, default: []},
     followers : {type: [String], required: true, default: []},
@@ -14,7 +14,6 @@ const usersSchema = mongoose.Schema({
         default : []
     },
     // unique for Listeners, although not enforced
-    liked_songs : {type : [String], default : []},
-    comments : {type : [String], default : []}
+    liked_songs : {type : [String], default : []}
 }, {collection: 'Users'});
 export default usersSchema;
