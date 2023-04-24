@@ -1,6 +1,20 @@
 import * as usersDao from "./users-dao.js";
 const AuthController = (app) => {
     const register = async (req, res) => {
+        {
+            /*
+            "username" : string,
+            "password" : string
+            "role" : ARTIST || LISTENER
+             */
+        }
+        const currentUser = req.session["currentUser"];
+        if (currentUser) {
+            // 404 if we already have an existing user
+            res.sendStatus(404);
+            return;
+        }
+
         const username = req.body.username;
         const password = req.body.password;
         const user = await usersDao
@@ -22,6 +36,13 @@ const AuthController = (app) => {
             "password" : string
              */
         }
+        const currentUser = req.session["currentUser"];
+        if (currentUser) {
+            // 404 if we already have an existing user
+            res.sendStatus(404);
+            return;
+        }
+
 
         const username = req.body.username;
         const password = req.body.password;
@@ -55,7 +76,13 @@ const AuthController = (app) => {
     };
 
     const update = async (req, res) => {
-        const userId = req.body._id;
+        const currentUser = req.session["currentUser"];
+        if (!currentUser) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const userId = currentUser._id;
         const updatedUser = req.body;
         const status = await usersDao
             .updateUser(userId, updatedUser);
