@@ -45,6 +45,7 @@ const AuthController = (app) => {
     };
 
     const logout = async (req, res) => {
+        const currentUser = req.session["currentUser"];
         if (!currentUser) {
             res.sendStatus(404);
             return;
