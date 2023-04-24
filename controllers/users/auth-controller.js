@@ -16,6 +16,13 @@ const AuthController = (app) => {
     };
 
     const login = async (req, res) => {
+        {
+            /*
+            "username" : string,
+            "password" : string
+             */
+        }
+
         const username = req.body.username;
         const password = req.body.password;
         const user = await usersDao
@@ -38,6 +45,10 @@ const AuthController = (app) => {
     };
 
     const logout = async (req, res) => {
+        if (!currentUser) {
+            res.sendStatus(404);
+            return;
+        }
         req.session.destroy();
         res.sendStatus(200);
     };
