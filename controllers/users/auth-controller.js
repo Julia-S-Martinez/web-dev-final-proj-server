@@ -84,8 +84,15 @@ const AuthController = (app) => {
 
         const userId = currentUser._id;
         const updatedUser = req.body;
+
+        // prevent attempts to change id
+        if (updatedUser["_id"] && (updatedUser["_id"] !== userId)) {
+            res.sendStatus(404);
+        }
         const status = await usersDao
             .updateUser(userId, updatedUser);
+        req.session["currentUser"] = await usersDao.findUser(userId)
+
         res.json(status);
     };
 
