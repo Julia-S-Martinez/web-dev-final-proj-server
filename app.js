@@ -15,7 +15,7 @@ app.use(
         secret: "any string",
         resave: false,
         saveUninitialized: true,
-        cookie: { sameSite: false, secure: true},
+        cookie: { sameSite: 'none', secure: true},
     })
 );
 app.use(
