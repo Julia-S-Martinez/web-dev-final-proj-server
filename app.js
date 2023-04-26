@@ -15,6 +15,10 @@ app.use(
         secret: "any string",
         resave: false,
         saveUninitialized: true,
+        cookie : {
+            sameSite: 'none',
+            secure: true
+        },
     })
 );
 app.use(
@@ -25,6 +29,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use()
 const port = process.env.PORT || 4000;
 PostController(app);
 UserController(app);
