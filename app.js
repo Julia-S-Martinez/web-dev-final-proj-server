@@ -22,6 +22,7 @@ if (process.env.WD_ENV === 'PROD') {
     app.set('trust proxy', 1);
     sess.cookie.secure = true;
     sess.cookie.sameSite = 'none';
+    sess.cookie.httpOnly = false;
 }
 app.use(
     session(sess)
