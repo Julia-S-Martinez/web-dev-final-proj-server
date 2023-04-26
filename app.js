@@ -5,36 +5,24 @@ import PostController
 import AuthController from "./controllers/users/auth-controller.js";
 import cors from 'cors';
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 
 mongoose.connect(process.env.WD_FINAL_DB_STRING);
 
 import session from "express-session";
 const app = express();
-
-const sess = {
-    secret: "any string",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false},
-};
-if (process.env.WD_ENV === 'PROD') {
-    app.set('trust proxy', 1);
-    sess.cookie.secure = true;
-    sess.cookie.sameSite = 'none';
-    sess.cookie.httpOnly = false;
-}
 app.use(
-    session(sess)
+    session({
+        secret: "any string",
+        resave: false,
+        saveUninitialized: true,
+    })
 );
-
 app.use(
     cors({
         credentials: true,
-        origin: process.env.WD_CORS_ORIGIN
+        origin: "http://localhost:3000",
     })
 );
-app.use(bodyParser.json());
 
 app.use(express.json());
 const port = process.env.PORT || 4000;
