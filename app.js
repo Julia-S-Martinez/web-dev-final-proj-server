@@ -11,19 +11,20 @@ mongoose.connect(process.env.WD_FINAL_DB_STRING);
 
 import session from "express-session";
 const app = express();
-let expSession = session({
+
+const sess = {
     secret: "any string",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false},
-});
+};
 if (process.env.ENV === 'PROD') {
     app.set('trust proxy', 1);
-    expSession.options.cookie.secure = true;
-    expSession.options.cookie.sameSite = 'none';
+    sess.cookie.secure = true;
+    sess.cookie.sameSite = 'none';
 }
 app.use(
-    session(expSession)
+    session(sess)
 );
 
 app.use(
